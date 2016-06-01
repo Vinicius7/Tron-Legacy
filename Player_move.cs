@@ -1,4 +1,4 @@
-using UnityEngine;using System.Collections;public class Player_move : MonoBehaviour {
+using System.Collections;using UnityEngine;public class Player_move : MonoBehaviour {
 
     // Movement keys (now on  Unity Input Manager)
 
@@ -36,21 +36,23 @@ using UnityEngine;using System.Collections;public class Player_move : MonoBeh
         // Scale it (horizontally or vertically)
         float dist = Vector2.Distance(a,b);        if (a.x != b.x)            co.transform.localScale = new Vector2(dist + 1,1);        else            co.transform.localScale = new Vector2(1,dist + 1);        }
 
-    // Update is called once per frame
-    void Update () {
-        //Input
-        Vector2 inputDirection = new Vector2(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical")).normalized;
+    void Update () { }
 
+ 
+    void FixedUpdate () {
+       //Input
+       Vector2 inputDirection = new Vector2(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical")).normalized;
 
-        //Debug
-        print(GetComponent<Rigidbody2D>().velocity);
+       //Debug
+       print(GetComponent<Rigidbody2D>().velocity);
+            
 
         //Speed up
         if (Input.GetAxis("Fire1") > 0)
             GetComponent<Rigidbody2D>().velocity += (currentDirection * acelerationRate);
 
 
-        // Check for key presses
+        // Change directions
         if (inputDirection.y == 1 && currentDirection.y == 0) {            currentDirection = Vector2.up;            GetComponent<Rigidbody2D>().velocity = currentDirection * speed;            spawnWall();            }        else if (inputDirection.y == -1 && currentDirection.y == 0) {            currentDirection = Vector2.down;            GetComponent<Rigidbody2D>().velocity = currentDirection * speed;            spawnWall();            }        else if (inputDirection.x == 1 && currentDirection.x == 0) {            currentDirection = Vector2.right;            GetComponent<Rigidbody2D>().velocity = currentDirection * speed;            spawnWall();            }        else if (inputDirection.x == -1 && currentDirection.x == 0) {            currentDirection = Vector2.left;            GetComponent<Rigidbody2D>().velocity = currentDirection * speed;            spawnWall();            }        fitColliderBetween(wall,lastWallEnd,transform.position);        }    void OnTriggerEnter2D (Collider2D co) {
         // Not the current wall?
         if (co != wall) {            print("Player lost:" + name);            Destroy(gameObject);            }        }
